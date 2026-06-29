@@ -236,7 +236,7 @@ function SquadSetup({ onStart, onJoinGame }) {
               onChange={(e) => { setJoinCode(e.target.value.replace(/\D/g, '')); setJoinError(''); }}
               onKeyDown={(e) => e.key === 'Enter' && handleJoinWithCode()}
               placeholder="4-digit code"
-              className="flex-1 bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-white font-black text-center text-xl tracking-[0.5em] placeholder-slate-500 placeholder-tracking-normal placeholder-text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent"
+              className="w-36 bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-white font-black text-center text-2xl tracking-widest placeholder-slate-500 placeholder-tracking-normal placeholder-text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent"
             />
             <button
               onClick={handleJoinWithCode}
