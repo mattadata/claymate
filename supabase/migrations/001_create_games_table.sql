@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS games (
   active_station INTEGER,
   active_shooter TEXT,
   active_shot_index INTEGER,
+  joined_players JSONB NOT NULL DEFAULT '[]',
   status TEXT NOT NULL DEFAULT 'active',
   created_at TIMESTAMPTZ DEFAULT now()
 );

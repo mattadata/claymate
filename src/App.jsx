@@ -319,13 +319,14 @@ function SquadSetup({ onStart, onJoinGame }) {
 }
 
 // ─── Main Scorecard ────────────────────────────────────────────────────────────
-function Scorecard({ squad, numStations, gameId, gameName, gameCode, initialScores, onEndGame }) {
+function Scorecard({ squad, numStations, gameId, gameName, gameCode, initialScores, myName, onEndGame }) {
   const [scores, setScores] = useState(initialScores || createInitialScores(squad, numStations));
   const [activeStation, setActiveStation] = useState(null);
   const [activeShooterIndex, setActiveShooterIndex] = useState(0);
   const [activeShotIndex, setActiveShotIndex] = useState(0);
   const [showEndConfirm, setShowEndConfirm] = useState(false);
   const [syncStatus, setSyncStatus] = useState('connected'); // connected | syncing | offline
+  const [joinedPlayers, setJoinedPlayers] = useState([]);
   const scoresRef = useRef(scores);
   const activeStationRef = useRef(activeStation);
   const activeShooterIndexRef = useRef(activeShooterIndex);
@@ -408,6 +409,11 @@ function Scorecard({ squad, numStations, gameId, gameName, gameCode, initialScor
             setActiveShooterIndex(remoteIdx);
             setActiveShotIndex(newData.active_shot_index);
           }
+        }
+
+        // Sync joined players list
+        if (newData.joined_players) {
+          setJoinedPlayers(newData.joined_players);
         }
 
         setSyncStatus('connected');
@@ -500,9 +506,14 @@ function Scorecard({ squad, numStations, gameId, gameName, gameCode, initialScor
           <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Code:</span>
           <span className="text-sm font-black text-amber-400 tracking-[0.3em]">{gameCode}</span>
         </div>
-        <div className="flex items-center gap-1.5">
-          <div className={`w-2 h-2 rounded-full ${syncIndicatorColor}`} />
-          <span className="text-[10px] text-slate-500 uppercase">{syncStatus}</span>
+        <div className="flex items-center gap-3">
+          {joinedPlayers.length > 0 && (
+            <span className="text-[11px] font-bold text-emerald-400">👥 {joinedPlayers.length}</span>
+          )}
+          <div className="flex items-center gap-1.5">
+            <div className={`w-2 h-2 rounded-full ${syncIndicatorColor}`} />
+            <span className="text-[10px] text-slate-500 uppercase">{syncStatus}</span>
+          </div>
         </div>
       </div>
 
@@ -691,7 +702,19 @@ export default function App() {
   };
 
   // Join an existing game by code
-  const handleJoinGame = (game) => {
+  const handleJoinGame = async (game) => {
+    // Pick a player name from the squad that hasn't joined yet
+    const existing = game.joined_players || [];
+    const available = game.squad.filter(n => !existing.includes(n));
+    const myName = available.length > 0 ? available[0] : game.squad[0];
+    const newJoined = [...existing, myName];
+
+    // Update the game record so the host sees us join
+    await supabase
+      .from('games')
+      .update({ joined_players: newJoined })
+      .eq('id', game.id);
+
     setGameConfig({
       squad: game.squad,
       numStations: game.num_stations,
@@ -699,6 +722,7 @@ export default function App() {
       gameName: game.game_name,
       gameCode: game.game_code,
       existingScores: game.scores,
+      myName,
     });
   };
 
@@ -728,6 +752,7 @@ export default function App() {
       gameName={gameConfig.gameName}
       gameCode={gameConfig.gameCode}
       initialScores={gameConfig.existingScores}
+      myName={gameConfig.myName}
       onEndGame={(scores) => setFinalScores(scores)}
     />
   );
