@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase } from './supabaseClient';
 
 const MAX_SHOTS = 10;
-const DEFAULT_SQUAD = ["Matt", "Zach", "Alex"];
+const DEFAULT_SQUAD = ["Matt", "Chris", "Brian"];
 const DEFAULT_STATIONS = 8;
 
 const ADJECTIVES = ["swift","bold","keen","rugged","brisk","clever","mighty","stout","fierce","noble"];
