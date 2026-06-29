@@ -235,13 +235,13 @@ function SquadSetup({ onStart, onJoinGame }) {
               value={joinCode}
               onChange={(e) => { setJoinCode(e.target.value.replace(/\D/g, '')); setJoinError(''); }}
               onKeyDown={(e) => e.key === 'Enter' && handleJoinWithCode()}
-              placeholder="4-digit code"
-              className="w-36 bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-white font-black text-center text-2xl tracking-widest placeholder-slate-500 placeholder-tracking-normal placeholder-text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent"
+              placeholder="Code"
+              className="flex-1 min-w-0 bg-slate-700 border border-slate-600 rounded-lg px-4 py-3 text-white font-black text-center text-2xl tracking-[0.3em] placeholder-slate-500 placeholder-tracking-normal placeholder-text-base focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent"
             />
             <button
               onClick={handleJoinWithCode}
               disabled={joinLoading || joinCode.length !== 4}
-              className="bg-emerald-600 hover:bg-emerald-500 disabled:bg-slate-600 disabled:text-slate-500 text-white px-5 rounded-lg font-bold transition-colors"
+              className="bg-emerald-600 hover:bg-emerald-500 disabled:bg-slate-600 disabled:text-slate-500 text-white px-6 py-3 rounded-lg font-bold transition-colors shrink-0"
             >
               Join
             </button>
