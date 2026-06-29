@@ -73,7 +73,18 @@ The app uses a single `games` table:
 | `status` | TEXT | `active` or `ended` |
 | `created_at` | TIMESTAMPTZ | Creation timestamp |
 
-Enable **Realtime** on the `games` table in your Supabase Dashboard for live sync.
+Enable **Realtime** on the `games` table in your Supabase Dashboard for live sync
+(Database → Replication → Sources → enable the `games` table, or run
+`PUBLICATION supabase_realtime ADD TABLE games;`).
+
+### SQL Setup
+
+The full database schema is available in [`supabase/migrations/001_create_games_table.sql`](supabase/migrations/001_create_games_table.sql).
+Run this single query in your Supabase SQL Editor to set up everything:
+
+```sql
+-- Copy the contents of supabase/migrations/001_create_games_table.sql
+```
 
 ## License
 
